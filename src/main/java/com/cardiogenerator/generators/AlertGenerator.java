@@ -1,24 +1,42 @@
+//again changed package name
+
 package com.cardiogenerator.generators;
 
 import java.util.Random;
 
 import com.cardiogenerator.outputs.OutputStrategy;
+/**
+ * A class which generates randomized alerts( ranzomized as in fi it will trigger or not)
+ */
 
 public class AlertGenerator implements PatientDataGenerator {
 
     public static final Random randomGenerator = new Random();
-    private boolean[] AlertStates; // false = resolved, true = pressed
+    //variable changed oto lowerCamelCase
+    private boolean[] alertStates; // false = resolved, true = pressed
 
     public AlertGenerator(int patientCount) {
-        AlertStates = new boolean[patientCount + 1];
+        /**
+         * A constructor used to initialize the alertStates array
+         * We create an array bigger by 1 since we start our patientIds from 1, not 0
+         * @param patientCount amount of patients
+         * 
+         */
+        alertStates = new boolean[patientCount + 1];
     }
 
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
+        /**
+         * Has a chance ot generate or resolve an alert if one is already taking placefor a specific patient
+         * then outputs it with our prefferred method
+         * @param patientId Patient for which we want to try generate/resolve an alert
+         * @param outputStrategy Prefered way of outputting our data
+         */
         try {
-            if (AlertStates[patientId]) {
+            if (alertStates[patientId]) {
                 if (randomGenerator.nextDouble() < 0.9) { // 90% chance to resolve
-                    AlertStates[patientId] = false;
+                    alertStates[patientId] = false;
                     // Output the alert
                     outputStrategy.output(patientId, System.currentTimeMillis(), "Alert", "resolved");
                 }
@@ -28,7 +46,7 @@ public class AlertGenerator implements PatientDataGenerator {
                 boolean alertTriggered = randomGenerator.nextDouble() < p;
 
                 if (alertTriggered) {
-                    AlertStates[patientId] = true;
+                    alertStates[patientId] = true;
                     // Output the alert
                     outputStrategy.output(patientId, System.currentTimeMillis(), "Alert", "triggered");
                 }

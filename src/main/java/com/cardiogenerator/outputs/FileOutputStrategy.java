@@ -8,6 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ConcurrentHashMap;
+/**
+ * Used to output data into a file format, in this case .txt
+ *  
+ */
 
 //class names should be upper case
 public class FileOutputStrategy implements OutputStrategy {
@@ -24,6 +28,13 @@ public class FileOutputStrategy implements OutputStrategy {
 
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
+        /**
+         * Outputs given data into a txt file
+         * @param patientId Id of patient to print
+         * @param timestamp Time of said observation in a long format
+         * @param label Label of said observation
+         * @param data Data of said observation to print
+         */
         try {
             // Create the directory
             Files.createDirectories(Paths.get(baseDirectory));

@@ -13,7 +13,7 @@ import com.cardiogenerator.outputs.ConsoleOutputStrategy;
 import com.cardiogenerator.outputs.OutputStrategy;
 import com.cardiogenerator.outputs.TcpOutputStrategy;
 import com.cardiogenerator.outputs.WebSocketOutputStrategy;
-import com.cardiogenerator.outputs.fileOutputStrategy;
+import com.cardiogenerator.outputs.FileOutputStrategy;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +23,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+/**
+ * The main executable file, used to generate data on a specified(or not) number of patients
+ * as well as exporting it into a preffered location (console, file or websocket)
+ */
 
 public class HealthDataSimulator {
 
@@ -44,6 +48,11 @@ public class HealthDataSimulator {
     }
 
     private static void parseArguments(String[] args) throws IOException {
+        /**
+         * This method parses arguments from running the file and adjusts the main program accordingly.
+         * For example updating the amount of patients and changing ways to output the data
+         * @param args Arguments from main
+         */
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-h":
@@ -71,7 +80,7 @@ public class HealthDataSimulator {
                             if (!Files.exists(outputPath)) {
                                 Files.createDirectories(outputPath);
                             }
-                            outputStrategy = new fileOutputStrategy(baseDirectory);
+                            outputStrategy = new FileOutputStrategy(baseDirectory);
                         } else if (outputArg.startsWith("websocket:")) {
                             try {
                                 int port = Integer.parseInt(outputArg.substring(10));
@@ -105,6 +114,10 @@ public class HealthDataSimulator {
     }
 
     private static void printHelp() {
+        /**
+         * This method simply prints the basic help window
+         * with all possible options when it comes to using HealthDataSimulator
+         * it doesn't return anything */
         System.out.println("Usage: java HealthDataSimulator [options]");
         System.out.println("Options:");
         System.out.println("  -h                       Show help and exit.");
@@ -122,6 +135,11 @@ public class HealthDataSimulator {
     }
 
     private static List<Integer> initializePatientIds(int patientCount) {
+        /** 
+         * This methods gives patients their id's
+         * @param patientCount The amount of patients to create(with id's)
+         * @return An Integer list of Patient Ids, startingg at 1 and ending at patientCount
+        */
         List<Integer> patientIds = new ArrayList<>();
         for (int i = 1; i <= patientCount; i++) {
             patientIds.add(i);
@@ -130,6 +148,12 @@ public class HealthDataSimulator {
     }
 
     private static void scheduleTasksForPatients(List<Integer> patientIds) {
+        /**
+         * This method iterates over each patient in the list and then generates medical data for him at specific intervals
+         * 
+         * @param pateintIds lis of patients for whom ot genereate the data
+         * 
+         */
         ECGDataGenerator ecgDataGenerator = new ECGDataGenerator(patientCount);
         BloodSaturationDataGenerator bloodSaturationDataGenerator = new BloodSaturationDataGenerator(patientCount);
         BloodPressureDataGenerator bloodPressureDataGenerator = new BloodPressureDataGenerator(patientCount);
@@ -146,6 +170,14 @@ public class HealthDataSimulator {
     }
 
     private static void scheduleTask(Runnable task, long period, TimeUnit timeUnit) {
+        /**
+         * This method schedules the tasks in the schedule thread pool.
+         * The randomizer adds a delay before each execution to redestibute the workload on the system
+         * 
+         * @param task A runnable task to perform
+         * @param period Interval in between different generations
+         * @param TimeUnit Pick a time unit for the period(eg. seconds, minutes)
+         */
         scheduler.scheduleAtFixedRate(task, random.nextInt(5), period, timeUnit);
     }
 }
