@@ -1,0 +1,16 @@
+This is a description of my UML Class diagram for the signal project.
+
+FIrst of all I have created 2 interfaces for both of the interfaces within our project.
+
+After creating both interfaces I have made another node for each of the classes connected to them and then
+joined them together using Inheritence line. 
+(I have now realized that they should be the implementation lines instead, but I cant seem to find the file in an editable format)
+
+In each of the nodes I have listed all their properties/attributes, and if it was a final one, I have added the {readOnly} tag to it
+When describing arrays, I also used the notation of eg. int[0..*] to show it.
+
+I then created another node showing the SimpleWebSocketServer with all of its methods and parameters as well,
+which I then connected to WebSocketOutputStrategy with the Composition line since the server cant survive without
+the other class. I also added 1's in the multiplicity slots since the WebSocketOutputStrategy can only hande 1 server at a time.
+
+Finally, I finished it off by connecting almost all of our nodes with the one-way Association line to the HealthDataSimulator class.
