@@ -1,6 +1,6 @@
-This is a description of my UML Class diagram for the signal project.
+First Ex1UMLClass.pdf:
 
-FIrst of all I have created 2 interfaces for both of the interfaces within our project.
+First of all I have created 2 interfaces for both of the interfaces within our project.
 
 After creating both interfaces I have made another node for each of the classes connected to them and then
 joined them together using Inheritence line. 
@@ -14,3 +14,33 @@ which I then connected to WebSocketOutputStrategy with the Composition line sinc
 the other class. I also added 1's in the multiplicity slots since the WebSocketOutputStrategy can only hande 1 server at a time.
 
 Finally, I finished it off by connecting almost all of our nodes with the one-way Association line to the HealthDataSimulator class.
+
+
+
+Now StateDiagram,
+much simpler than the previous simply shows how the state of the alert changes, from Generated, to test, to Acknowledged to resolved.
+
+
+As for the sequence diagram, it once again gets more complicated.
+We start off with our Actor, in this case being the patient since he is ultimately the one that:
+A. Is the source of the alert and B. is the final step in resolving it
+So our alert's journey starts at the alert generator where alarming data from the patient is sent to
+The alert generator will now check wtih the DataStorage if that alarming data has been happening for a while
+and is just bug(a 0.1 second massive spike due to moving an arm for example)
+
+Now the DataStroage will return that it either is indeed a bug, at which point we automatically resolve
+the alert and move on, or we find out that its an actual emergency at which case some medical staff 
+should get notified so we send an alert.
+
+Then the medical staff can manually resolve it by helping the patient or pronoucing him dead
+at which point we resolve the alert.
+
+As for the alert generation system, the graph is meant to show the connection between the 3 classes
+the alert generator has methods that can decipher and compare the data its getting as well as create the initial alert
+then the alert has the most essentail data however keeps it private to not break any laws
+the method is protected sot hat it can still be used within the system
+Finally the alert manager has a PriorityQueue setup to ensure the alerts get attended to in proper sequence
+as well as a sender method to assign it to personell
+
+
+
