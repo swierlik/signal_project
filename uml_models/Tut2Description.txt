@@ -43,4 +43,20 @@ Finally the alert manager has a PriorityQueue setup to ensure the alerts get att
 as well as a sender method to assign it to personell
 
 
+The DataStorageSystem is once again a more simple class. It has 3 classes, DataStorage, PateientData
+and DataRetriever. PatientData is the class that will be initialized for evey single patient in the hospital
+and will contain their medical data.
+The DataStorage manages that data so that its accesible and has an allocated variable/is easy to find
+And finally the DataRetriever takes care of managing who is allowed acces to which data.
+In our case its done with a 2d boolean array with the xAxis corresponding to the pateintId and the yAxis
+to the medicalStaffId. If you go to spot[medicalId][patientId] on the array, and the value stored there
+is True, then you can access the data.
+
+
+As for the PatientIdentificationSystem, the PatientIdentifier has the IdentityManager and a list of 
+PatientRecords and each time it gets a new PateintRecord it will crossrefernce it through the IdentityManager
+to make sure its valid data
+
+Data Source adapter just goes through the whole loop, each after the other until the final result is achieved
+
 
