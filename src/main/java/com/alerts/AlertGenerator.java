@@ -17,11 +17,11 @@ public class AlertGenerator {
     private DataStorage dataStorage;
     public static void main(String[] args) {
         DataReaderReal reader = new DataReaderReal();
-        DataStorage dataStorage = new DataStorage();
-        reader.readData(dataStorage);
+        DataStorage dataStorage = new DataStorage(reader);
         AlertGenerator alertGenerator = new AlertGenerator(dataStorage);
-        Patient patient = new Patient(53);
-        alertGenerator.evaluateData(patient);
+        for (Patient patient: dataStorage.getAllPatients()) {
+            alertGenerator.evaluateData(patient);
+        }
     }
 
     /**

@@ -63,8 +63,7 @@ public class DataReaderReal implements DataReader{
     }
     public static void main(String[] args) {
         DataReaderReal reader = new DataReaderReal();
-        DataStorage dataStorage = new DataStorage();
-        reader.readData(dataStorage);
+        DataStorage dataStorage = new DataStorage(reader);
     }
 
     
