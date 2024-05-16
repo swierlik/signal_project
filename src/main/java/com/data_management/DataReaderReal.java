@@ -61,10 +61,36 @@ public class DataReaderReal implements DataReader{
         }
         //System.out.println(Arrays.toString(files));
     }
+
+    @Override
+    public void readLine(String line, DataStorage dataStorage) {
+        Pattern pattern = Pattern.compile("Patient ID: (\\d+), Timestamp: (\\d+), Label: (.*), Data: (\\d+\\.\\d+)");
+
+        Matcher matcher = pattern.matcher(line);
+
+        // Iterate over matches and extract variables
+        while (matcher.find()) {
+            int patientID = Integer.parseInt(matcher.group(1));
+            long timestamp = Long.parseLong(matcher.group(2));
+            String label = matcher.group(3);
+            double dataValue;
+            if(label.equals("Saturation"))//saturation and alert are strings, rest doubles
+                dataValue = Double.parseDouble(matcher.group(4).substring(0, matcher.group(4).length()-1));
+            else if(label.equals("Alert"))
+                dataValue = matcher.group(4).equals("triggered") ? 1 : 0; 
+            else
+                dataValue = Double.parseDouble(matcher.group(4));
+            // Read the data from the file
+            // Store the data in the data storage
+            dataStorage.addPatientData(patientID, dataValue, label, timestamp);
+            System.out.println("Patient ID: " + patientID + ", Timestamp: " + timestamp + ", Label: " + label + ", Data: " + dataValue);
+        }
+    }
     public static void main(String[] args) {
         DataReaderReal reader = new DataReaderReal();
         DataStorage dataStorage = new DataStorage(reader);
     }
+    
 
     
 }
