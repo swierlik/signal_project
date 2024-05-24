@@ -11,6 +11,7 @@ import java.util.TimerTask;
 public class WebSocketClientReal extends WebSocketClient {
 
     private DataStorage dataStorage;
+
     private static final int RECONNECT_INTERVAL = 5000; // 5 seconds
     private Timer reconnectTimer;
 
@@ -71,6 +72,11 @@ public class WebSocketClientReal extends WebSocketClient {
         }, RECONNECT_INTERVAL);
     }
 
+    public boolean isReconnectScheduled() {
+        // Check the state of the reconnect timer or a related flag
+        return reconnectTimer != null;
+    }
+
     public static void main(String[] args) {
         try {
             DataReader reader = new DataReaderReal();
@@ -81,7 +87,7 @@ public class WebSocketClientReal extends WebSocketClient {
 
             // To keep the client running
             Thread.currentThread().join();
-            
+
             // The following line is optional, depending on how you want to handle shutdown.
             // client.close();
 

@@ -1,6 +1,5 @@
 package data_management;
 
-import org.java_websocket.handshake.ServerHandshake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,27 +7,28 @@ import com.data_management.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
 
 class WebSocketClientRealTest {
-    
+
     private WebSocketClientReal client;
-    private MockDataStorage mockDataStorage;
+    private DataStorage dataStorage;
 
     @BeforeEach
     void setUp() throws URISyntaxException {
-        mockDataStorage = new MockDataStorage(null);
-        client = new WebSocketClientReal(new URI("ws://test-uri"), mockDataStorage);
+        dataStorage = new DataStorage(new DataReaderReal());
+        client = new WebSocketClientReal(new URI("ws://test-uri"), dataStorage);
     }
 
     @Test
-    void testOnOpen(ServerHandshake handshake) {
-        client.onOpen(handshake);
+    void testOnOpen() {
+        // Directly call the method without parameters for simplicity
+        client.onOpen(null);
 
+        // Verify any relevant state or output if applicable
+        // Since there's no real handshake, you can verify printed statements or other indicators
+        assertTrue(true); // Placeholder assertion
     }
 
     @Test
@@ -37,8 +37,15 @@ class WebSocketClientRealTest {
 
         client.onMessage(validMessage);
 
-        assertEquals(1, mockDataStorage.receivedMessages.size());
-        assertEquals(validMessage, mockDataStorage.receivedMessages.get(0));
+        // Fetch the records and assert their content
+        var records = dataStorage.getRecords(123, 0, 500000);
+        assertEquals(1, records.size());
+
+        PatientRecord record = records.get(0);
+        assertEquals(123, record.getPatientId());
+        assertEquals(456789, record.getTimestamp());
+        assertEquals("HeartRate", record.getRecordType());
+        assertEquals(72.5, record.getMeasurementValue());
     }
 
     @Test
@@ -47,15 +54,17 @@ class WebSocketClientRealTest {
 
         client.onMessage(invalidMessage);
 
-        assertEquals(0, mockDataStorage.receivedMessages.size());
+        // Assuming patient ID 123 is used for the valid test, checking no records for invalid messages
+        assertEquals(0, dataStorage.getRecords(123, 0, 500000).size());
     }
 
     @Test
     void testOnClose() {
         client.onClose(1000, "Normal closure", true);
-        
-        // To verify that reconnect is scheduled, check if reconnect was attempted
-        assertTrue(client.isClosing());
+
+        // Assert the reconnect scheduling indirectly by checking the reconnection timer task
+        // Placeholder assertion - ensure you have a way to verify that reconnection is scheduled
+        assertTrue(client.isReconnectScheduled());
     }
 
     @Test
@@ -64,24 +73,6 @@ class WebSocketClientRealTest {
         client.onError(exception);
 
         // Add assertions to verify behavior if needed
-    }
-
-    private static class MockDataStorage extends DataStorage {
-        public MockDataStorage(DataReader reader) {
-            super(reader);
-        }
-        List<String> receivedMessages = new ArrayList<>();
-    }
-
-    class MockDataReader implements DataReader {
-        @Override
-        public void readData(DataStorage dataStorage) {
-            // No-op
-        }
-
-        @Override
-        public void readLine(String line, DataStorage dataStorage) {
-            ((MockDataStorage) dataStorage).receivedMessages.add(line);
-        }
+        assertTrue(true); // Placeholder assertion
     }
 }
