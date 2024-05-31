@@ -23,4 +23,8 @@ public class Alert {
     public long getTimestamp() {
         return timestamp;
     }
+
+    public String toString() {
+        return ("Alert: " + condition + " for patient " + patientId + " at " + timestamp);
+    }
 }
