@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.crypto.Data;
+
 public class DataReaderReal implements DataReader {
     @Override
     public void readData(DataStorage dataStorage) {
@@ -79,7 +81,7 @@ public class DataReaderReal implements DataReader {
 
     public static void main(String[] args) {
         DataReaderReal reader = new DataReaderReal();
-        DataStorage dataStorage = new DataStorage(reader);
+        DataStorage dataStorage = DataStorage.getInstance(reader);
         // Uncomment to test reading data from files
         // reader.readData(dataStorage);
     }

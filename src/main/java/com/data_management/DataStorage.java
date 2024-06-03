@@ -19,18 +19,23 @@ import com.alerts.AlertGenerator;
 public class DataStorage {
     private Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
     public DataReader dataReader;
-    /**
-     * Constructs a new instance of DataStorage, initializing the underlying storage
-     * structure.
-     */
-    public DataStorage(DataReader reader) {
+    private static DataStorage instance;
+
+
+    private DataStorage(DataReader reader) {
         this.patientMap = new HashMap<>();
-        try {
-            reader.readData(this);
-        } catch (IOException e) {
-            System.err.println("Error reading data: " + e.getMessage());
-        }
         this.dataReader = reader;
+    }
+
+    public static DataStorage getInstance(DataReader reader) {
+        if (instance == null) {
+            synchronized (DataStorage.class) {
+                if (instance == null) {
+                    instance = new DataStorage(reader);
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -46,6 +51,14 @@ public class DataStorage {
      * @param timestamp        the time at which the measurement was taken, in
      *                         milliseconds since the Unix epoch
      */
+    public void readData() {
+        try {
+            dataReader.readData(this);
+        } catch (IOException e) {
+            System.err.println("Error reading data: " + e.getMessage());
+        }
+    }
+    
     public void addPatientData(int patientId, double measurementValue, String recordType, long timestamp) {
         Patient patient = patientMap.get(patientId);
         if (patient == null) {
@@ -111,7 +124,7 @@ public class DataStorage {
         }
 
         // Initialize the AlertGenerator with the storage
-        AlertGenerator alertGenerator = new AlertGenerator(storage);
+        AlertGenerator alertGenerator = new AlertGenerator();
 
         // Evaluate all patients' data to check for conditions that may trigger alerts
         for (Patient patient : storage.getAllPatients()) {

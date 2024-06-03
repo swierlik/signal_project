@@ -80,7 +80,7 @@ public class WebSocketClientReal extends WebSocketClient {
     public static void main(String[] args) {
         try {
             DataReader reader = new DataReaderReal();
-            DataStorage dataStorage = new DataStorage(reader);
+            DataStorage dataStorage = DataStorage.getInstance(reader);
             URI serverUri = new URI("ws://your-websocket-server-uri");
             WebSocketClientReal client = new WebSocketClientReal(serverUri, dataStorage);
             client.connect();

@@ -8,13 +8,13 @@ import com.data_management.Patient;
 import java.util.List;
 import static org.junit.Assert.*;
 
-public class AlertGenRefacTest {
+public class AlertGeneratorTest {
 
-    private AlertGenRefac evaluator;
+    private AlertGenerator evaluator;
 
     @Before
     public void setUp() {
-        evaluator = new AlertGenRefac();
+        evaluator = new AlertGenerator();
     }
 
     @Test

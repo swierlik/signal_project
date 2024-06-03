@@ -17,7 +17,7 @@ class WebSocketClientRealTest {
 
     @BeforeEach
     void setUp() throws URISyntaxException {
-        dataStorage = new DataStorage(new DataReaderReal());
+        dataStorage = DataStorage.getInstance(new DataReaderReal());
         client = new WebSocketClientReal(new URI("ws://test-uri"), dataStorage);
     }
 

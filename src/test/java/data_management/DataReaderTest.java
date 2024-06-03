@@ -12,9 +12,8 @@ public class DataReaderTest {
     public void testReadData() {
         // TODO Implement the test for the readData method in DataReaderReal
         DataReader reader = new DataReaderReal();
-        DataStorage storage = new DataStorage(reader);
-        //since the dataRead method is automatically used in the constructor of DataStorage
-        //we can just see if theres anything in the storage
+        DataStorage storage = DataStorage.getInstance(reader);
+        storage.readData();
 
         //this is a very simple test, but it should be enough to see if the data is read correctly
         assertNotEquals(0, storage.getAllPatients().size());

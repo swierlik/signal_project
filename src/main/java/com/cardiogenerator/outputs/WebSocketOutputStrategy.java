@@ -43,7 +43,6 @@ public class WebSocketOutputStrategy implements OutputStrategy {
         @Override
         public void onMessage(WebSocket conn, String message) {
             // Not used in this context
-            
         }
 
         @Override

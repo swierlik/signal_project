@@ -35,6 +35,21 @@ public class HealthDataSimulator {
     private static OutputStrategy outputStrategy = new ConsoleOutputStrategy(); // Default output strategy
     private static final Random random = new Random();
 
+    private static HealthDataSimulator instance;
+
+    private HealthDataSimulator() {}
+
+    public static HealthDataSimulator getInstance() {
+        if (instance == null) {
+            synchronized (HealthDataSimulator.class) {
+                if (instance == null) {
+                    instance = new HealthDataSimulator();
+                }
+            }
+        }
+        return instance;
+    }
+
     public static void main(String[] args) throws IOException {
 
         parseArguments(args);
